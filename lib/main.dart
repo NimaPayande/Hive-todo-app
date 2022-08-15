@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_todo_app/pages/home_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_todo_app/models/task.dart';
 import 'package:hive_todo_app/pages/main_page.dart';
 import './constants.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter<Task>(TaskAdapter());
+  await Hive.openBox<Task>('tasksBox');
   runApp(const MyApp());
 }
 
