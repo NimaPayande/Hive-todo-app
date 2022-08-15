@@ -33,20 +33,24 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: primaryColor,
-          unselectedItemColor: darkGreyColor,
-          currentIndex: currentIndex,
-          onTap: onTap,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Iconsax.home_24), label: 'Home'),
-            BottomNavigationBarItem(
-                icon: Icon(Iconsax.document_1), label: 'Projects'),
-            BottomNavigationBarItem(
-                icon: Icon(Iconsax.calendar_1), label: 'Celendar'),
-            BottomNavigationBarItem(icon: Icon(Iconsax.menu), label: 'Menu'),
-          ]),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: primaryColor,
+            unselectedItemColor: darkGreyColor,
+            currentIndex: currentIndex,
+            onTap: onTap,
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Iconsax.home_24), label: 'Home'),
+              BottomNavigationBarItem(
+                  icon: Icon(Iconsax.document_1), label: 'Projects'),
+              BottomNavigationBarItem(
+                  icon: Icon(Iconsax.calendar_1), label: 'Celendar'),
+              BottomNavigationBarItem(icon: Icon(Iconsax.menu), label: 'Menu'),
+            ]),
+      ),
     );
   }
 }
