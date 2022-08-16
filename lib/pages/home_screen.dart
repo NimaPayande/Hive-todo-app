@@ -68,7 +68,14 @@ class _HomePageState extends State<HomePage> {
                             hintText: 'task title',
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 30,
+                          ),
+                          Text(
+                            'Description',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(
+                            height: 10,
                           ),
                           AppTextField(
                               formKey: _descriptionFormKey,
@@ -78,6 +85,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
+                    const Spacer(),
                     AppButton(
                         buttonText: isEditing ? 'Edit' : 'Add',
                         onPressed: () {
@@ -97,13 +105,18 @@ class _HomePageState extends State<HomePage> {
                             }
                             Navigator.pop(context);
                           }
-                        })
+                        }),
+                    const Spacer()
                   ],
                 ),
               );
             },
           );
         });
+  }
+
+  void undoChange(Box<Task> box, dynamic obj, int index) {
+    box.putAt(index, obj);
   }
 
   @override
@@ -121,56 +134,97 @@ class _HomePageState extends State<HomePage> {
                 itemCount: box.values.length,
                 itemBuilder: (context, index) {
                   Task? task = box.getAt(index);
-                  return Dismissible(
-                    background: Container(color: Colors.red),
-                    key: UniqueKey(),
-                    onDismissed: (direction) {
-                      task!.delete();
-                    },
-                    child: Card(
-                      color: Colors.white,
-                      elevation: 0,
-                      child: ListTile(
-                        title: Text(
-                          task!.title,
-                          style: task.isCompleted
-                              ? TextStyle(
-                                  fontSize: textTheme.titleMedium!.fontSize,
-                                  color: darkGreyColor,
-                                  decoration: TextDecoration.lineThrough)
-                              : textTheme.titleMedium,
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    child: Dismissible(
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        color: Colors.transparent,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.delete,
+                              color: Colors.black,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text('Task deleted!'),
+                            const Spacer(),
+                            TextButton(
+                                onPressed: () {
+                                  undoChange(box, task, index);
+                                },
+                                style: TextButton.styleFrom(
+                                    side: const BorderSide(width: 1)),
+                                child: const Text(
+                                  'Undo',
+                                  style: TextStyle(color: Colors.black),
+                                )),
+                          ],
                         ),
-                        subtitle: Text(
-                          task.description,
-                          style: textTheme.labelMedium,
-                        ),
-                        leading: task.isCompleted
-                            ? IconButton(
-                                icon: const Icon(Icons.check_box_rounded),
-                                onPressed: () => setState(() {
-                                  isCompleted = !isCompleted;
-                                  task.isCompleted = !task.isCompleted;
-                                  task.save();
-                                }),
-                              )
-                            : IconButton(
-                                icon: const Icon(
-                                    Icons.check_box_outline_blank_outlined),
-                                onPressed: () => setState(() {
-                                  isCompleted = !isCompleted;
-                                  task.isCompleted = !task.isCompleted;
-                                  task.save();
-                                }),
-                              ),
-                        onTap: () {
-                          setState(() {
-                            isEditing = true;
-                            titleController.text = task.title;
-                            descriptionController.text = task.description;
-                          });
+                      ),
+                      resizeDuration: const Duration(milliseconds: 2500),
+                      key: UniqueKey(),
+                      onDismissed: (direction) {
+                        task!.delete();
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(boxShadow: [
+                          BoxShadow(
+                              color: greyColor,
+                              blurRadius: 10,
+                              offset: Offset(0, 7))
+                        ]),
+                        child: Card(
+                          color: Colors.white,
+                          elevation: 0,
+                          child: ListTile(
+                            title: Text(
+                              task!.title,
+                              style: task.isCompleted
+                                  ? TextStyle(
+                                      fontSize: textTheme.titleMedium!.fontSize,
+                                      color: Colors.black87,
+                                      decoration: TextDecoration.lineThrough)
+                                  : textTheme.titleMedium,
+                            ),
+                            subtitle: Text(
+                              task.description,
+                              style: textTheme.labelMedium,
+                            ),
+                            leading: task.isCompleted
+                                ? IconButton(
+                                    icon: const Icon(
+                                      Icons.check_circle,
+                                      color: primaryColor,
+                                    ),
+                                    onPressed: () => setState(() {
+                                      isCompleted = !isCompleted;
+                                      task.isCompleted = !task.isCompleted;
+                                      task.save();
+                                    }),
+                                  )
+                                : IconButton(
+                                    icon: const Icon(Icons.circle_outlined),
+                                    onPressed: () => setState(() {
+                                      isCompleted = !isCompleted;
+                                      task.isCompleted = !task.isCompleted;
+                                      task.save();
+                                    }),
+                                  ),
+                            onTap: () {
+                              setState(() {
+                                isEditing = true;
+                                titleController.text = task.title;
+                                descriptionController.text = task.description;
+                              });
 
-                          showAddTaskBottomSheet(index: index);
-                        },
+                              showAddTaskBottomSheet(index: index);
+                            },
+                          ),
+                        ),
                       ),
                     ),
                   );

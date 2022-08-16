@@ -13,14 +13,14 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
-      width: 100,
+      height: 55,
+      width: 350,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(primary: primaryColor),
         onPressed: onPressed,
         child: Text(
           buttonText,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white, fontSize: 18),
         ),
       ),
     );

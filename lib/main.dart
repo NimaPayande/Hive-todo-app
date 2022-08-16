@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
               labelSmall: GoogleFonts.dmSans(
                 fontSize: 12,
               )),
+          iconTheme: const IconThemeData(size: 28),
           buttonTheme: const ButtonThemeData(
             buttonColor: primaryColor,
             disabledColor: greyColor,

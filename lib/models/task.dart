@@ -13,6 +13,12 @@ class Task extends HiveObject {
   String description;
   @HiveField(3)
   bool isCompleted;
+  @HiveField(4)
+  DateTime dateTime = DateTime.now();
 
-  Task({required this.title, this.description = '', this.isCompleted = false});
+  Task({
+    required this.title,
+    this.description = '',
+    this.isCompleted = false,
+  });
 }
