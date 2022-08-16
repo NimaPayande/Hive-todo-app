@@ -6,8 +6,6 @@ import 'package:hive_todo_app/pages/menu.dart';
 import 'package:hive_todo_app/pages/projects.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../main.dart';
-
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 

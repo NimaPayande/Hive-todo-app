@@ -19,28 +19,41 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primaryColor: primaryColor,
-        useMaterial3: true,
-        textTheme: TextTheme(
-            displayLarge: GoogleFonts.dmSans(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
-            displayMedium:
-                GoogleFonts.dmSans(fontSize: 28, fontWeight: FontWeight.bold),
-            titleLarge:
-                GoogleFonts.dmSans(fontSize: 24, fontWeight: FontWeight.bold),
-            titleMedium:
-                GoogleFonts.dmSans(fontSize: 20, fontWeight: FontWeight.w500),
-            bodyMedium:
-                GoogleFonts.dmSans(fontSize: 16, fontWeight: FontWeight.w500),
-            labelMedium: GoogleFonts.dmSans(fontSize: 14),
-            labelSmall: GoogleFonts.dmSans(fontSize: 12)),
-        buttonTheme: const ButtonThemeData(
-          buttonColor: primaryColor,
-          disabledColor: greyColor,
-        ),
-      ),
+          primaryColor: primaryColor,
+          useMaterial3: true,
+          textTheme: TextTheme(
+              displayLarge: GoogleFonts.dmSans(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+              displayMedium: GoogleFonts.dmSans(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+              titleLarge: GoogleFonts.dmSans(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+              titleMedium: GoogleFonts.dmSans(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black),
+              bodyMedium: GoogleFonts.dmSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black),
+              labelMedium:
+                  GoogleFonts.dmSans(fontSize: 14, color: darkGreyColor),
+              labelSmall: GoogleFonts.dmSans(
+                fontSize: 12,
+              )),
+          buttonTheme: const ButtonThemeData(
+            buttonColor: primaryColor,
+            disabledColor: greyColor,
+          ),
+          bottomSheetTheme: BottomSheetThemeData(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)))),
       debugShowCheckedModeBanner: false,
       home: const MainPage(),
     );
