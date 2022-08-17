@@ -1,8 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive_todo_app/widgets/button.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:animate_do/animate_do.dart';
 import '../constants.dart';
 import '../models/task.dart';
 import '../widgets/text_field.dart';
@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) {
           return BottomSheet(
+            enableDrag: false,
             onClosing: () {},
             builder: (context) {
               return SizedBox(
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Text(
                       isEditing ? 'Edit Task' : 'Add Task',
@@ -128,107 +129,164 @@ class _HomePageState extends State<HomePage> {
           valueListenable: Hive.box<Task>('tasksBox').listenable(),
           builder: (context, Box<Task> box, _) {
             if (box.isEmpty) {
-              return const Center(child: Text('No Task...'));
+              return FadeIn(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(child: Image.asset('images/3369471-ai.png')),
+                      Text(
+                        'Nothing to do...',
+                        style: textTheme.titleMedium,
+                      ),
+                    ],
+                  ),
+                ),
+              );
             }
-            return ListView.builder(
-                itemCount: box.values.length,
-                itemBuilder: (context, index) {
-                  Task? task = box.getAt(index);
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    child: Dismissible(
-                      direction: DismissDirection.endToStart,
-                      background: Container(
-                        color: Colors.transparent,
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.delete,
-                              color: Colors.black,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Text('Task deleted!'),
-                            const Spacer(),
-                            TextButton(
-                                onPressed: () {
-                                  undoChange(box, task, index);
-                                },
-                                style: TextButton.styleFrom(
-                                    side: const BorderSide(width: 1)),
-                                child: const Text(
-                                  'Undo',
-                                  style: TextStyle(color: Colors.black),
-                                )),
-                          ],
-                        ),
+            return SafeArea(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: FadeInUp(
+                  from: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const SizedBox(
+                        height: 30,
                       ),
-                      resizeDuration: const Duration(milliseconds: 2500),
-                      key: UniqueKey(),
-                      onDismissed: (direction) {
-                        task!.delete();
-                      },
-                      child: Container(
-                        decoration: const BoxDecoration(boxShadow: [
-                          BoxShadow(
-                              color: greyColor,
-                              blurRadius: 10,
-                              offset: Offset(0, 7))
-                        ]),
-                        child: Card(
-                          color: Colors.white,
-                          elevation: 0,
-                          child: ListTile(
-                            title: Text(
-                              task!.title,
-                              style: task.isCompleted
-                                  ? TextStyle(
-                                      fontSize: textTheme.titleMedium!.fontSize,
-                                      color: Colors.black87,
-                                      decoration: TextDecoration.lineThrough)
-                                  : textTheme.titleMedium,
-                            ),
-                            subtitle: Text(
-                              task.description,
-                              style: textTheme.labelMedium,
-                            ),
-                            leading: task.isCompleted
-                                ? IconButton(
-                                    icon: const Icon(
-                                      Icons.check_circle,
-                                      color: primaryColor,
-                                    ),
-                                    onPressed: () => setState(() {
-                                      isCompleted = !isCompleted;
-                                      task.isCompleted = !task.isCompleted;
-                                      task.save();
-                                    }),
-                                  )
-                                : IconButton(
-                                    icon: const Icon(Icons.circle_outlined),
-                                    onPressed: () => setState(() {
-                                      isCompleted = !isCompleted;
-                                      task.isCompleted = !task.isCompleted;
-                                      task.save();
-                                    }),
-                                  ),
-                            onTap: () {
-                              setState(() {
-                                isEditing = true;
-                                titleController.text = task.title;
-                                descriptionController.text = task.description;
-                              });
-
-                              showAddTaskBottomSheet(index: index);
-                            },
+                      Row(
+                        children: [
+                          const CircleAvatar(
+                            backgroundColor: primaryColor,
+                            radius: 6,
                           ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'To do',
+                            style: textTheme.titleLarge,
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          height: double.infinity,
+                          child: ListView.builder(
+                              itemCount: box.values.length,
+                              itemBuilder: (context, index) {
+                                Task? task = box.getAt(index);
+                                return Dismissible(
+                                  direction: DismissDirection.endToStart,
+                                  background: Container(
+                                    color: Colors.transparent,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.delete,
+                                          color: darkBlue,
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        const Text('Task deleted!'),
+                                        const Spacer(),
+                                        TextButton(
+                                            onPressed: () {
+                                              undoChange(box, task, index);
+                                            },
+                                            style: TextButton.styleFrom(
+                                                side:
+                                                    const BorderSide(width: 1)),
+                                            child: Text(
+                                              'Undo',
+                                              style: textTheme.bodyMedium,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  resizeDuration:
+                                      const Duration(milliseconds: 2500),
+                                  key: UniqueKey(),
+                                  onDismissed: (direction) {
+                                    task!.delete();
+                                  },
+                                  child: Container(
+                                    decoration: const BoxDecoration(boxShadow: [
+                                      BoxShadow(
+                                          color: greyColor,
+                                          blurRadius: 10,
+                                          offset: Offset(0, 7))
+                                    ]),
+                                    child: Card(
+                                      color: Colors.white,
+                                      elevation: 0,
+                                      child: ListTile(
+                                        title: Text(
+                                          task!.title,
+                                          style: task.isCompleted
+                                              ? TextStyle(
+                                                  fontSize: textTheme
+                                                      .titleMedium!.fontSize,
+                                                  color: darkBlue,
+                                                  decoration: TextDecoration
+                                                      .lineThrough)
+                                              : textTheme.titleMedium,
+                                        ),
+                                        subtitle: Text(
+                                          task.description,
+                                          style: textTheme.labelMedium,
+                                        ),
+                                        leading: task.isCompleted
+                                            ? IconButton(
+                                                icon: const Icon(
+                                                  Icons.check_circle,
+                                                  color: primaryColor,
+                                                ),
+                                                onPressed: () => setState(() {
+                                                  isCompleted = !isCompleted;
+                                                  task.isCompleted =
+                                                      !task.isCompleted;
+                                                  task.save();
+                                                }),
+                                              )
+                                            : IconButton(
+                                                icon: const Icon(
+                                                    Icons.circle_outlined),
+                                                onPressed: () => setState(() {
+                                                  isCompleted = !isCompleted;
+                                                  task.isCompleted =
+                                                      !task.isCompleted;
+                                                  task.save();
+                                                }),
+                                              ),
+                                        onTap: () {
+                                          setState(() {
+                                            isEditing = true;
+                                            titleController.text = task.title;
+                                            descriptionController.text =
+                                                task.description;
+                                          });
+
+                                          showAddTaskBottomSheet(index: index);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
                         ),
                       ),
-                    ),
-                  );
-                });
+                    ],
+                  ),
+                ),
+              ),
+            );
           }),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 20, right: 10),

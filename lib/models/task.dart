@@ -1,12 +1,11 @@
-import 'dart:math';
-
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 part 'task.g.dart';
 
 @HiveType(typeId: 0)
 class Task extends HiveObject {
   @HiveField(0)
-  int id = Random().nextInt(9999);
+  String id = const Uuid().v1();
   @HiveField(1)
   String title;
   @HiveField(2)

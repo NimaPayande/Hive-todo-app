@@ -23,25 +23,15 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: TextTheme(
               displayLarge: GoogleFonts.dmSans(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                  fontSize: 32, fontWeight: FontWeight.bold, color: darkBlue),
               displayMedium: GoogleFonts.dmSans(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                  fontSize: 28, fontWeight: FontWeight.bold, color: darkBlue),
               titleLarge: GoogleFonts.dmSans(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                  fontSize: 24, fontWeight: FontWeight.bold, color: darkBlue),
               titleMedium: GoogleFonts.dmSans(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black),
+                  fontSize: 20, fontWeight: FontWeight.w500, color: darkBlue),
               bodyMedium: GoogleFonts.dmSans(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black),
+                  fontSize: 16, fontWeight: FontWeight.w500, color: darkBlue),
               labelMedium:
                   GoogleFonts.dmSans(fontSize: 14, color: darkGreyColor),
               labelSmall: GoogleFonts.dmSans(
