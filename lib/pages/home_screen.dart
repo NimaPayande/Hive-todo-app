@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive_todo_app/widgets/button.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:animate_do/animate_do.dart';
+import '../widgets/button.dart';
 import '../constants.dart';
 import '../models/task.dart';
 import '../widgets/text_field.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -19,8 +18,10 @@ class _HomePageState extends State<HomePage> {
   final _descriptionFormKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+
   bool isEditing = false;
   bool isCompleted = false;
+
   void showAddTaskBottomSheet({int? index}) {
     showModalBottomSheet(
         isScrollControlled: true,
@@ -181,6 +182,12 @@ class _HomePageState extends State<HomePage> {
                               itemCount: box.values.length,
                               itemBuilder: (context, index) {
                                 Task? task = box.getAt(index);
+                                for (var element in box.values.toList()) {
+                                  if (element.dateTime.day !=
+                                      DateTime.now().day) {
+                                    task!.delete();
+                                  }
+                                }
                                 return Dismissible(
                                   direction: DismissDirection.endToStart,
                                   background: Container(
@@ -203,9 +210,9 @@ class _HomePageState extends State<HomePage> {
                                             style: TextButton.styleFrom(
                                                 side:
                                                     const BorderSide(width: 1)),
-                                            child: Text(
+                                            child: const Text(
                                               'Undo',
-                                              style: textTheme.bodyMedium,
+                                              style: TextStyle(color: darkBlue),
                                             )),
                                       ],
                                     ),

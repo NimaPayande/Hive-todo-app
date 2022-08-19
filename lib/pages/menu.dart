@@ -6,7 +6,7 @@ class MenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('Menu'),
+      child: Text('Menu Page'),
     );
   }
 }

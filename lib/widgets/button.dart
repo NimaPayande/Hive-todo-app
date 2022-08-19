@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_todo_app/constants.dart';
 
 class AppButton extends StatelessWidget {
@@ -18,10 +19,11 @@ class AppButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(primary: primaryColor),
         onPressed: onPressed,
-        child: Text(
-          buttonText,
-          style: const TextStyle(color: Colors.white, fontSize: 18),
-        ),
+        child: Text(buttonText,
+            style: GoogleFonts.dmSans(
+                fontSize: 18,
+                color: Colors.white,
+                fontWeight: FontWeight.w500)),
       ),
     );
   }
