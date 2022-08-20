@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:animate_do/animate_do.dart';
 import '../widgets/button.dart';
 import '../constants.dart';
@@ -27,92 +26,96 @@ class _HomePageState extends State<HomePage> {
         isScrollControlled: true,
         context: context,
         builder: (context) {
-          return BottomSheet(
-            enableDrag: false,
-            onClosing: () {},
-            builder: (context) {
-              return SizedBox(
-                height: 600,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      isEditing ? 'Edit Task' : 'Add Task',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    const Divider(
-                      thickness: 1.5,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'Title',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          AppTextField(
-                            contoller: titleController,
-                            validatorText: 'Please enter the title',
-                            formKey: _titleFormKey,
-                            hintText: 'task title',
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Text(
-                            'Description',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          AppTextField(
-                              formKey: _descriptionFormKey,
-                              hintText: 'task description',
-                              validatorText: '',
-                              contoller: descriptionController)
-                        ],
+          return Transform.translate(
+            offset:
+                Offset(0.0, -0.5 * MediaQuery.of(context).viewInsets.bottom),
+            child: BottomSheet(
+              enableDrag: false,
+              onClosing: () {},
+              builder: (context) {
+                return SizedBox(
+                  height: 600,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    const Spacer(),
-                    AppButton(
-                        buttonText: isEditing ? 'Edit' : 'Add',
-                        onPressed: () {
-                          if (_titleFormKey.currentState!.validate()) {
-                            Box<Task> taskBox = Hive.box<Task>('tasksBox');
-                            if (isEditing) {
-                              taskBox.putAt(
-                                  index!,
-                                  Task(
-                                      title: titleController.text,
-                                      description: descriptionController.text,
-                                      isCompleted: isCompleted));
-                            } else {
-                              taskBox.add(Task(
-                                  title: titleController.text,
-                                  description: descriptionController.text));
+                      Text(
+                        isEditing ? 'Edit Task' : 'Add Task',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Divider(
+                        thickness: 1.5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'Title',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            AppTextField(
+                              contoller: titleController,
+                              validatorText: 'Please enter the title',
+                              formKey: _titleFormKey,
+                              hintText: 'task title',
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              'Description',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            AppTextField(
+                                formKey: _descriptionFormKey,
+                                hintText: 'task description',
+                                validatorText: '',
+                                contoller: descriptionController)
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      AppButton(
+                          buttonText: isEditing ? 'Edit' : 'Add',
+                          onPressed: () {
+                            if (_titleFormKey.currentState!.validate()) {
+                              Box<Task> taskBox = Hive.box<Task>('tasksBox');
+                              if (isEditing) {
+                                taskBox.putAt(
+                                    index!,
+                                    Task(
+                                        title: titleController.text,
+                                        description: descriptionController.text,
+                                        isCompleted: isCompleted));
+                              } else {
+                                taskBox.add(Task(
+                                    title: titleController.text,
+                                    description: descriptionController.text));
+                              }
+                              Navigator.pop(context);
                             }
-                            Navigator.pop(context);
-                          }
-                        }),
-                    const Spacer()
-                  ],
-                ),
-              );
-            },
+                          }),
+                      const Spacer()
+                    ],
+                  ),
+                );
+              },
+            ),
           );
         });
   }
@@ -182,6 +185,7 @@ class _HomePageState extends State<HomePage> {
                               itemCount: box.values.length,
                               itemBuilder: (context, index) {
                                 Task? task = box.getAt(index);
+                                //! Delete tasks from prevous day
                                 for (var element in box.values.toList()) {
                                   if (element.dateTime.day !=
                                       DateTime.now().day) {
