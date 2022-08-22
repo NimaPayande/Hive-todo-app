@@ -11,13 +11,13 @@ void main() async {
   await Hive.openBox<Task>('tasksBox');
   runApp(const MyApp());
 }
+//* instagram: @niima.dev
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
           primaryColor: primaryColor,
           useMaterial3: true,
