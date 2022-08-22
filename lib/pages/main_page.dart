@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants.dart';
-import '../pages/home_screen.dart';
+import 'home_page.dart';
 import '../pages/menu.dart';
 import 'package:iconsax/iconsax.dart';
 

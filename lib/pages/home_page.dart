@@ -5,6 +5,7 @@ import '../widgets/button.dart';
 import '../constants.dart';
 import '../models/task.dart';
 import '../widgets/text_field.dart';
+import 'menu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -185,11 +186,13 @@ class _HomePageState extends State<HomePage> {
                               itemCount: box.values.length,
                               itemBuilder: (context, index) {
                                 Task? task = box.getAt(index);
-                                //! Delete tasks from prevous day
-                                for (var element in box.values.toList()) {
-                                  if (element.dateTime.day !=
-                                      DateTime.now().day) {
-                                    task!.delete();
+                                if (MenuPage.deletePrevousDay) {
+                                  //! Delete tasks from prevous day
+                                  for (var element in box.values.toList()) {
+                                    if (element.dateTime.day !=
+                                        DateTime.now().day) {
+                                      task!.delete();
+                                    }
                                   }
                                 }
                                 return Dismissible(
