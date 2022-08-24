@@ -295,22 +295,21 @@ class _HomePageState extends State<HomePage> {
                                                     Icons.check_circle,
                                                     color: primaryColor,
                                                   ),
-                                                  onPressed: () => setState(() {
+                                                  onPressed: () {
                                                     isCompleted = !isCompleted;
                                                     task.isCompleted =
                                                         !task.isCompleted;
                                                     task.save();
-                                                  }),
-                                                )
+                                                  })
                                               : IconButton(
                                                   icon: const Icon(
                                                       Icons.circle_outlined),
-                                                  onPressed: () => setState(() {
+                                                  onPressed: () {
                                                     isCompleted = !isCompleted;
                                                     task.isCompleted =
                                                         !task.isCompleted;
                                                     task.save();
-                                                  }),
+                                                  },
                                                 ),
                                           onTap: () {
                                             setState(() {
