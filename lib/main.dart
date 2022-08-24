@@ -11,7 +11,6 @@ void main() async {
   await Hive.openBox<Task>('tasksBox');
   runApp(const MyApp());
 }
-//* instagram: @niima.dev
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

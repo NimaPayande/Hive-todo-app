@@ -18,11 +18,10 @@ class _HomePageState extends State<HomePage> {
   final _descriptionFormKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-
   bool isEditing = false;
   bool isCompleted = false;
 
-  void showAddTaskBottomSheet({int? index}) {
+  void showAddTaskBottomSheet({int? index, required Box<Task> box}) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -86,11 +85,16 @@ class _HomePageState extends State<HomePage> {
                                 formKey: _descriptionFormKey,
                                 hintText: 'task description',
                                 validatorText: '',
-                                contoller: descriptionController)
+                                contoller: descriptionController),
+                            const SizedBox(
+                              height: 30,
+                            ),
                           ],
                         ),
                       ),
-                      const Spacer(),
+                      const SizedBox(
+                        height: 40,
+                      ),
                       AppButton(
                           buttonText: isEditing ? 'Edit' : 'Add',
                           onPressed: () {
@@ -100,13 +104,15 @@ class _HomePageState extends State<HomePage> {
                                 taskBox.putAt(
                                     index!,
                                     Task(
-                                        title: titleController.text,
-                                        description: descriptionController.text,
-                                        isCompleted: isCompleted));
+                                      title: titleController.text,
+                                      description: descriptionController.text,
+                                      isCompleted: isCompleted,
+                                    ));
                               } else {
                                 taskBox.add(Task(
-                                    title: titleController.text,
-                                    description: descriptionController.text));
+                                  title: titleController.text,
+                                  description: descriptionController.text,
+                                ));
                               }
                               Navigator.pop(context);
                             }
@@ -123,6 +129,16 @@ class _HomePageState extends State<HomePage> {
 
   void undoChange(Box<Task> box, dynamic obj, int index) {
     box.putAt(index, obj);
+  }
+
+  int countDoneTasks(Box<Task> box) {
+    int doneTasks = 0;
+    for (var item in box.values) {
+      if (item.isCompleted) {
+        doneTasks++;
+      }
+    }
+    return doneTasks;
   }
 
   @override
@@ -173,11 +189,23 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'To do',
                             style: textTheme.titleLarge,
-                          )
+                          ),
+                          const Spacer(),
+                          Text(box.values.length == 1
+                              ? '${countDoneTasks(box)} of ${box.values.length} task'
+                              : '${countDoneTasks(box)} of ${box.values.length} tasks'),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          CircularProgressIndicator(
+                            value: countDoneTasks(box) / box.values.length,
+                            color: primaryColor,
+                            backgroundColor: greyColor,
+                          ),
                         ],
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 20,
                       ),
                       Expanded(
                         child: SizedBox(
@@ -186,6 +214,7 @@ class _HomePageState extends State<HomePage> {
                               itemCount: box.values.length,
                               itemBuilder: (context, index) {
                                 Task? task = box.getAt(index);
+
                                 if (MenuPage.deletePrevousDay) {
                                   //! Delete tasks from prevous day
                                   for (var element in box.values.toList()) {
@@ -195,6 +224,7 @@ class _HomePageState extends State<HomePage> {
                                     }
                                   }
                                 }
+
                                 return Dismissible(
                                   direction: DismissDirection.endToStart,
                                   background: Container(
@@ -225,70 +255,75 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   resizeDuration:
-                                      const Duration(milliseconds: 2500),
+                                      const Duration(milliseconds: 2300),
                                   key: UniqueKey(),
                                   onDismissed: (direction) {
                                     task!.delete();
                                   },
-                                  child: Container(
-                                    decoration: const BoxDecoration(boxShadow: [
-                                      BoxShadow(
-                                          color: greyColor,
-                                          blurRadius: 10,
-                                          offset: Offset(0, 7))
-                                    ]),
-                                    child: Card(
-                                      color: Colors.white,
-                                      elevation: 0,
-                                      child: ListTile(
-                                        title: Text(
-                                          task!.title,
-                                          style: task.isCompleted
-                                              ? TextStyle(
-                                                  fontSize: textTheme
-                                                      .titleMedium!.fontSize,
-                                                  color: darkBlue,
-                                                  decoration: TextDecoration
-                                                      .lineThrough)
-                                              : textTheme.titleMedium,
-                                        ),
-                                        subtitle: Text(
-                                          task.description,
-                                          style: textTheme.labelMedium,
-                                        ),
-                                        leading: task.isCompleted
-                                            ? IconButton(
-                                                icon: const Icon(
-                                                  Icons.check_circle,
-                                                  color: primaryColor,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: greyColor,
+                                                blurRadius: 10,
+                                                offset: Offset(0, 7))
+                                          ]),
+                                      child: Card(
+                                        color: Colors.white,
+                                        elevation: 0,
+                                        child: ListTile(
+                                          title: Text(
+                                            task!.title,
+                                            style: task.isCompleted
+                                                ? TextStyle(
+                                                    fontSize: textTheme
+                                                        .titleMedium!.fontSize,
+                                                    color: darkBlue,
+                                                    decoration: TextDecoration
+                                                        .lineThrough)
+                                                : textTheme.titleMedium,
+                                          ),
+                                          subtitle: Text(
+                                            task.description,
+                                            style: textTheme.labelMedium,
+                                          ),
+                                          leading: task.isCompleted
+                                              ? IconButton(
+                                                  icon: const Icon(
+                                                    Icons.check_circle,
+                                                    color: primaryColor,
+                                                  ),
+                                                  onPressed: () => setState(() {
+                                                    isCompleted = !isCompleted;
+                                                    task.isCompleted =
+                                                        !task.isCompleted;
+                                                    task.save();
+                                                  }),
+                                                )
+                                              : IconButton(
+                                                  icon: const Icon(
+                                                      Icons.circle_outlined),
+                                                  onPressed: () => setState(() {
+                                                    isCompleted = !isCompleted;
+                                                    task.isCompleted =
+                                                        !task.isCompleted;
+                                                    task.save();
+                                                  }),
                                                 ),
-                                                onPressed: () => setState(() {
-                                                  isCompleted = !isCompleted;
-                                                  task.isCompleted =
-                                                      !task.isCompleted;
-                                                  task.save();
-                                                }),
-                                              )
-                                            : IconButton(
-                                                icon: const Icon(
-                                                    Icons.circle_outlined),
-                                                onPressed: () => setState(() {
-                                                  isCompleted = !isCompleted;
-                                                  task.isCompleted =
-                                                      !task.isCompleted;
-                                                  task.save();
-                                                }),
-                                              ),
-                                        onTap: () {
-                                          setState(() {
-                                            isEditing = true;
-                                            titleController.text = task.title;
-                                            descriptionController.text =
-                                                task.description;
-                                          });
+                                          onTap: () {
+                                            setState(() {
+                                              isEditing = true;
+                                              titleController.text = task.title;
+                                              descriptionController.text =
+                                                  task.description;
+                                            });
 
-                                          showAddTaskBottomSheet(index: index);
-                                        },
+                                            showAddTaskBottomSheet(
+                                                box: box, index: index);
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -312,7 +347,7 @@ class _HomePageState extends State<HomePage> {
               descriptionController.text = '';
             });
 
-            showAddTaskBottomSheet();
+            showAddTaskBottomSheet(box: Hive.box<Task>('tasksBox'));
           },
           elevation: 0,
           backgroundColor: primaryColor,
