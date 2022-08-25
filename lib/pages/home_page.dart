@@ -19,7 +19,6 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   bool isEditing = false;
-  bool isCompleted = false;
 
   void showAddTaskBottomSheet({int? index, required Box<Task> box}) {
     showModalBottomSheet(
@@ -106,7 +105,8 @@ class _HomePageState extends State<HomePage> {
                                     Task(
                                       title: titleController.text,
                                       description: descriptionController.text,
-                                      isCompleted: isCompleted,
+                                      isCompleted:
+                                          box.getAt(index)!.isCompleted,
                                     ));
                               } else {
                                 taskBox.add(Task(
@@ -296,7 +296,6 @@ class _HomePageState extends State<HomePage> {
                                                     color: primaryColor,
                                                   ),
                                                   onPressed: () {
-                                                    isCompleted = !isCompleted;
                                                     task.isCompleted =
                                                         !task.isCompleted;
                                                     task.save();
@@ -305,7 +304,6 @@ class _HomePageState extends State<HomePage> {
                                                   icon: const Icon(
                                                       Icons.circle_outlined),
                                                   onPressed: () {
-                                                    isCompleted = !isCompleted;
                                                     task.isCompleted =
                                                         !task.isCompleted;
                                                     task.save();
