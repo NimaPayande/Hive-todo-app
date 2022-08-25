@@ -1,6 +1,16 @@
 # hive_todo_app
 
-A new Flutter project.
+## Todo list app using Flutter implemented with Hive Database
+### Screenshots
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/96375955/186707756-622cc46a-a801-4216-b257-6c25a2be5db1.png" width="300">
+  <img src="https://user-images.githubusercontent.com/96375955/186707771-f0fd4eac-88a7-4096-80a1-446182116e20.png" width="300">
+  <img src="https://user-images.githubusercontent.com/96375955/186707783-67a02837-cd0d-4575-bfee-efdab7d19351.png" width="300">
+  </p>
+  
+### [Instagram](https://instagram.com/niima.dev)
+
+
 
 ## Getting Started
 
